@@ -1,5 +1,6 @@
 import { Client, Events, GatewayIntentBits, GuildMember } from "discord.js";
 import "dotenv/config";
+import { handle_role_assignment } from "./handler/roleAssign";
 
 const { owner_id } = require('./config/config.json');
 
@@ -45,7 +46,9 @@ client.on('messageCreate', async (msg) => {
     if (owner_id !== msg.author.id) {
         msg.reply(`Hmmm... But why?\nAs I can see you don't have permission for that.`);
     }
-})
+
+    await handle_role_assignment(client, msg);
+});
 
 
 client.login(process.env.TOKEN);
