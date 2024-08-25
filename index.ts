@@ -1,5 +1,7 @@
-import { Client, Events, GatewayIntentBits } from "discord.js";
+import { Client, Events, GatewayIntentBits, GuildMember } from "discord.js";
 import "dotenv/config";
+
+const { owner_id } = require('./config/config.json');
 
 const client = new Client({
     intents: [
@@ -29,33 +31,21 @@ client.once("ready", async () => {
     }, 60 * 1000 );
 });
 
+// Normal mention
 client.on(Events.MessageCreate, async (msg) => {
     if (msg.mentions.has(client.user!) && !msg.author.bot && (msg.content === null)) {
         await msg.reply('Did you just mention me?\nSo, Anything you need?');
     }
 });
 
+// Role add
+client.on('messageCreate', async (msg) => {
+    if (msg.author.bot) return;
 
-client.on(Events.MessageCreate, async (msg) => {
-    if (msg.mentions.has(client.user!) && !msg.author.bot) {
-        const usr_msg = msg.content.replace(/<@!?(\d+)>/g, '');
-
-        if(usr_msg === null) return;
-
-
-
-        await msg.reply("what? ummm.... ");
-    } else if (msg.reference && msg.reference.messageId) {
-        const replied_msg = await msg.channel.messages.fetch(msg.reference.messageId);
-        if (replied_msg.author.bot) {
-            const usr_msg = msg.content;
-
-            if (usr_msg === null ) return;
-
-            await msg.reply("What? ummmm....");
-        }
+    if (owner_id !== msg.author.id) {
+        msg.reply(`Hmmm... But why?\nAs I can see you don't have permission for that.`);
     }
-});
+})
 
 
 client.login(process.env.TOKEN);
