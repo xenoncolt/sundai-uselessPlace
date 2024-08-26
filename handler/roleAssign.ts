@@ -16,18 +16,33 @@ export async function handle_role_assignment(client: Client, msg: Message) {
         if (mentioned_users && mentioned_role.size === 1) {
             const role_to_give = mentioned_role.first();
 
-            let reply_msg = `Give the role ${role_to_give} to`;
+            const got_role: string[] = [];
 
-            mentioned_users.forEach(async (member: GuildMember) => {
+            // mentioned_users.forEach(async (member: GuildMember) => {
+            //     if (member.id === client.user?.id) return;
+            //     try {
+            //         await member.roles.add(role_to_give!);
+            //         got_role.push(` **${member.displayName}**`);
+            //     } catch (error) {
+            //         console.error(`Failed to assign role to ${member.displayName}`, error);
+            //         msg.reply(`Couldn't give the role to ${member.displayName}`);
+            //     }
+            // });
+
+            for (const member of mentioned_users.values()) {
+                if (member.id === client.user?.id) continue;
                 try {
                     await member.roles.add(role_to_give!);
-                    reply_msg += ` **${member.displayName}**`;
+                    got_role.push(`**${member.displayName}**`);
                 } catch (error) {
                     console.error(`Failed to assign role to ${member.displayName}`, error);
-                    reply_msg = `Couldn't give the role to ${member.displayName}`;
+                    msg.reply(`Sorry, dude.. I am not able to give the role to **${member.displayName}**`);
+                    return;
                 }
-                msg.reply(reply_msg);
-            });
+            }
+
+
+            msg.reply(`Give the role ${role_to_give} to ${got_role.join(', ')}`);
         } else if (mentioned_role.size !== 1) {
             if (mentioned_users!.size > 0) {
                 role_assignment.set(msg.author.id, {
@@ -54,18 +69,32 @@ export async function handle_role_assignment(client: Client, msg: Message) {
                 const role_to_give = msg.mentions.roles.first();
                 const { users } = context;
 
-                let reply_msg = `Give the role ${role_to_give} to`;
+                const got_role: string[] = [];
 
-                users.forEach(async (member: GuildMember) => {
+                // users.forEach(async (member: GuildMember) => {
+                //     if (member.id === client.user?.id) return;
+                //     try {
+                //         await member.roles.add(role_to_give!);
+                //         got_role.push(`**${member.displayName}**`);
+                //     } catch (error) {
+                //         console.error(`Failed to assign role to ${member.displayName}`, error);
+                //         msg.reply(`Couldn't give the role to ${member.displayName}`);
+                //     }
+                // });
+
+                for (const member of users) {
+                    if (member.id === client.user?.id) continue;
                     try {
                         await member.roles.add(role_to_give!);
-                        reply_msg += ` **${member.displayName}**`
+                        got_role.push(`**${member.displayName}**`);
                     } catch (error) {
-                        console.error(`Failed to assign role to ${member.displayName}`, error);
-                        reply_msg = `Couldn't give the role to ${member.displayName}`;
+                        console.error(`Failed to assign role to ${member.displayName}`);
+                        msg.reply(`Sorry, Dude. I don't know why but I couldn't able to give role **${member.displayName}**`);
                     }
-                    msg.reply(reply_msg);
-                });
+                }
+
+
+                msg.reply(`Give the role ${role_to_give} to ${got_role.join(', ')}`);
 
                 role_assignment.delete(original_msg.mentions.repliedUser!.id || '');
             } else if (context && msg.mentions.roles.size !== 1) {
