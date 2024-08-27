@@ -1,4 +1,5 @@
 import { Client, GuildMember, Message } from "discord.js";
+const { owner_id } = require('./../config/config.json');
 
 interface role_assignment{
     users: GuildMember[];
@@ -11,6 +12,10 @@ export async function handle_role_assignment(client: Client, msg: Message) {
     if (!msg.author.bot && msg.mentions.has(client.user!) && msg.content.toLowerCase().includes('give') && msg.content.toLowerCase().includes('role')) {
         const mentioned_users = msg.mentions.members;
         const mentioned_role = msg.mentions.roles;
+
+        if (owner_id !== msg.author.id) {
+            msg.reply(`Hmmm... But why?\nAs I can see you don't have permission for that.`);
+        }
 
 
         if (mentioned_users && mentioned_role.size === 1) {
