@@ -1,6 +1,7 @@
-import { Client, Events, GatewayIntentBits, GuildMember } from "discord.js";
+import { Client, Events, GatewayIntentBits } from "discord.js";
 import "dotenv/config";
 import { handle_role_assignment } from "./handler/roleAssign";
+import { monitor_member } from "./handler/monitorMember";
 
 
 const client = new Client({
@@ -44,6 +45,11 @@ client.on('messageCreate', async (msg) => {
 
     await handle_role_assignment(client, msg);
 });
+
+// Monitor
+client.on(Events.GuildMemberUpdate, async(old_member, new_member) => {
+    await monitor_member(client, old_member, new_member);
+})
 
 
 client.login(process.env.TOKEN);
