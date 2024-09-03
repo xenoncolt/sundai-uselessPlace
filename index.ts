@@ -32,19 +32,17 @@ client.once("ready", async () => {
     }, 60 * 1000 );
 });
 
-// Normal mention
+// role add
 client.on(Events.MessageCreate, async (msg) => {
-    if (msg.mentions.has(client.user!) && !msg.author.bot && (msg.content === null)) {
+    if (msg.author.bot) return;
+
+    if (msg.mentions.has(client.user!) && (msg.content.replace(/<@!?[0-9]+>/, '') === '')) {
         await msg.reply('Did you just mention me?\nSo, Anything you need?');
     }
-});
-
-// Role add
-client.on('messageCreate', async (msg) => {
-    if (msg.author.bot) return;
 
     await handle_role_assignment(client, msg);
 });
+
 
 // Monitor
 client.on(Events.GuildMemberUpdate, async(old_member, new_member) => {
