@@ -57,11 +57,11 @@ export async function monitor_member(client: Client, old_member: GuildMember | P
     if (added_roles.size > 0 || removed_roles.size > 0) {
         let role_change_text = '';
         if (added_roles.size > 0) {
-            role_change_text += `**Added Roles**: ${added_roles.map(role => role.name).join(', ')}\n`;
+            role_change_text += `**✅Added Roles**: <@&${added_roles.map(role => role.id).join('>, <@&')}>\n`;
         }
 
         if (removed_roles.size > 0) {
-            role_change_text += `**Removed Roles: ${removed_roles.map(role => role.name).join(', ')}\n`;
+            role_change_text += `**❌Removed Roles**: <@&${removed_roles.map(role => role.id).join('>, <@&')}>\n`;
         }
 
         embed.setFields({

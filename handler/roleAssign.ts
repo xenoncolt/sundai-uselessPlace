@@ -22,17 +22,7 @@ export async function handle_role_assignment(client: Client, msg: Message) {
             const role_to_give = mentioned_role.first();
 
             const got_role: string[] = [];
-
-            // mentioned_users.forEach(async (member: GuildMember) => {
-            //     if (member.id === client.user?.id) return;
-            //     try {
-            //         await member.roles.add(role_to_give!);
-            //         got_role.push(` **${member.displayName}**`);
-            //     } catch (error) {
-            //         console.error(`Failed to assign role to ${member.displayName}`, error);
-            //         msg.reply(`Couldn't give the role to ${member.displayName}`);
-            //     }
-            // });
+            
 
             for (const member of mentioned_users.values()) {
                 if (member.id === client.user?.id) continue;
@@ -76,16 +66,6 @@ export async function handle_role_assignment(client: Client, msg: Message) {
 
                 const got_role: string[] = [];
 
-                // users.forEach(async (member: GuildMember) => {
-                //     if (member.id === client.user?.id) return;
-                //     try {
-                //         await member.roles.add(role_to_give!);
-                //         got_role.push(`**${member.displayName}**`);
-                //     } catch (error) {
-                //         console.error(`Failed to assign role to ${member.displayName}`, error);
-                //         msg.reply(`Couldn't give the role to ${member.displayName}`);
-                //     }
-                // });
 
                 for (const member of users) {
                     if (member.id === client.user?.id) continue;
